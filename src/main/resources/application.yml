@@ -1,0 +1,11 @@
+security:
+  security:
+    basic:
+      enabled: false
+  oauth2:
+    client:
+      client-id: auth-server
+      client-secret: auth-server-secret
+
+jwt:
+  signing-key: jwt-sample-key
