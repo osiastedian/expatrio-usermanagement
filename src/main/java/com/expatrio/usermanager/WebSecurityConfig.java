@@ -10,8 +10,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 
@@ -30,14 +32,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests().antMatchers("/login", "/oauth/authorize").permitAll()
-                .and().authorizeRequests().antMatchers("/api/**").authenticated()
-            .and().formLogin().disable();
+        http.csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/login","/oauth/**", "/error")
+            .permitAll()
+        .and().authorizeRequests().antMatchers("/api/**").authenticated()
+//        .and().anonymous()
+//        .and().sessionManagement()
+//        .sessionCreationPolicy(SessionCreationPolicy.NEVER);
+        ;
+
     }
+
+
 
 
 

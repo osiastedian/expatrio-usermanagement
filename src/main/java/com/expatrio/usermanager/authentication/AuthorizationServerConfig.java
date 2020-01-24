@@ -80,9 +80,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient(clientId)
                 .secret(encoder.encode(clientSecret))
-                .scopes("read", "write", "openid")
+                .scopes("resource:read","read", "write", "openid")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit")
-                .redirectUris("http://localhost:8080/login");
+                .redirectUris("http://localhost:4200/");
     }
 
 
