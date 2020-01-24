@@ -1,5 +1,7 @@
 security:
   oauth2:
+    authorization:
+      endpoint: http://localhost:8080/oauth/authorize
     client:
       client-id: auth-server
       client-secret: auth-server-secret
@@ -14,7 +16,6 @@ spring:
         clientSecret: auth-server-secret
         accessTokenUri: http://localhost:8080/oauth/token
       resource:
-        filter-order: 3
         jwt:
           key-value: |
             jwt-sample-key

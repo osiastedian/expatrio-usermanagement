@@ -23,12 +23,6 @@ public class UserController {
         return userService.getUser(userID);
     }
 
-    @GetMapping("/test")
-    String test() {
-        return "Test";
-    }
-
-
     @PostMapping()
     UserDto createUser(@NotNull @RequestBody CreateUserDto userDto) {
         User user = User.builder()
