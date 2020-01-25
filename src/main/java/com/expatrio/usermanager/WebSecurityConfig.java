@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             .permitAll()
         .and()
             .anonymous();
-
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
         http.formLogin()
                 .loginPage("/login");
         http.logout();
