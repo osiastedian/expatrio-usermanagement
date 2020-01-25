@@ -1,8 +1,10 @@
 package com.expatrio.usermanager.user.domain;
 
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +17,13 @@ import java.util.UUID;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
 
+    @NoArgsConstructor
+    @Data
     class UserAuthority implements GrantedAuthority {
         UserRole role;
         UserAuthority(UserRole role)

@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -47,9 +47,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userName) throws UsernameNotFoundException {
         if(userName.equals("default")) {
-            UserDetails user = User.builder()
+            User user = User.builder()
                     .role(UserRole.ADMIN)
                     .firstName("Default")
                     .lastName("Default")
