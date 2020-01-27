@@ -1,11 +1,25 @@
 security:
-  security:
-    basic:
-      enabled: false
   oauth2:
+    authorization:
+      endpoint: http://localhost:8080/oauth/authorize
     client:
       client-id: auth-server
       client-secret: auth-server-secret
-
 jwt:
   signing-key: jwt-sample-key
+
+spring:
+  security:
+    oauth2:
+      resource:
+        jwt:
+          key-value: |
+            jwt-sample-key
+
+config:
+  oauth2:
+    clientID: resource-server
+    clientSecret: resource-server-secret
+    accessTokenUri: http://localhost:8080/oauth/token
+    userAuthorizationUri: http://localhost:8080/oauth/authorize
+    resourceURI: http://localhost:8082/api/

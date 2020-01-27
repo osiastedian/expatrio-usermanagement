@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -41,16 +42,24 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.tokenStore(tokenStore())
                 .accessTokenConverter(
                         accessTokenConverter()
-                ).authenticationManager(authenticationManager);
+                ).authenticationManager(authenticationManager)
+        ;
     }
 
-
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+        security.passwordEncoder(encoder);
+        security.checkTokenAccess("permitAll()");
+        security.allowFormAuthenticationForClients();
+    }
 
     @Bean
     public TokenStore tokenStore() {
@@ -61,7 +70,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public JwtAccessTokenConverter accessTokenConverter() {
         JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         String signingKey = this.jwtSigningKey;
-
         converter.setSigningKey(signingKey);
         return converter;
     }
@@ -80,9 +88,15 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.inMemory()
                 .withClient(clientId)
                 .secret(encoder.encode(clientSecret))
-                .scopes("read", "write", "openid")
+                .autoApprove(true)
+                .scopes("resource:read","read", "write", "openid")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit")
-                .redirectUris("http://localhost:8080/login");
+                .redirectUris(
+                    "http://localhost:4200/",
+                    "http://localhost:8080/test-client",
+                    "http://localhost:8080/swagger-ui.html",
+                    "http://localhost:8080/webjars/springfox-swagger-ui/oauth2-redirect.html"
+                );
     }
 
 

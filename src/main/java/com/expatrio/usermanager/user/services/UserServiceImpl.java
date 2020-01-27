@@ -6,6 +6,7 @@ import com.expatrio.usermanager.user.dto.UserDto;
 import com.expatrio.usermanager.user.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
@@ -46,15 +47,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public User loadUserByUsername(String userName) throws UsernameNotFoundException {
         if(userName.equals("default")) {
-            return User.builder()
+            User user = User.builder()
                     .role(UserRole.ADMIN)
                     .firstName("Default")
                     .lastName("Default")
                     .password(passwordEncoder().encode("default"))
                     .username("default")
                     .build();
+            return user;
         }
         User user = userRepository.getUserByUsername(userName);
         if(user == null) {

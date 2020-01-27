@@ -18,16 +18,10 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @GetMapping()
-    UserDto getUser(UUID userID) {
+    @GetMapping("/{id}")
+    UserDto getUser(@PathVariable( name = "id") UUID userID) {
         return userService.getUser(userID);
     }
-
-    @GetMapping("/test")
-    String test() {
-        return "Test";
-    }
-
 
     @PostMapping()
     UserDto createUser(@NotNull @RequestBody CreateUserDto userDto) {
