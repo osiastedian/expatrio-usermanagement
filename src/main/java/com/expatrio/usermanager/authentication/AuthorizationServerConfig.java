@@ -93,10 +93,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit")
                 .redirectUris(
                     "http://localhost:4200/",
+                    "http://localhost:4200/token-store",
                     "http://localhost:8080/test-client",
                     "http://localhost:8080/swagger-ui.html",
                     "http://localhost:8080/webjars/springfox-swagger-ui/oauth2-redirect.html"
+                )
+            .and()
+                .withClient("user-manager-ui")
+                .secret("user-manager-ui-secret")
+                .autoApprove(true)
+                .scopes("resource:read","read", "write", "openid", "profile")
+                .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit", "code")
+                .redirectUris(
+                        "http://localhost:4200/",
+                        "http://localhost:4200",
+                        "http://localhost:4200/token-store"
                 );
+
     }
 
 

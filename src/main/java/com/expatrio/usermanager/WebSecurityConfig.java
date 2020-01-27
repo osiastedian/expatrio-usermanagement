@@ -50,11 +50,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .cors().disable()
-            .csrf().disable();
+        http.csrf().disable();
         http.authorizeRequests()
-            .antMatchers("/login","/oauth/**", "/error", "/swagger**", "/v2/api-docs")
+            .antMatchers(
+                    "/login",
+                    "/oauth/**",
+                    "/error",
+                    "/swagger**",
+                    "/v2/api-docs")
             .permitAll()
         .and()
             .anonymous().and()
