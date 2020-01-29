@@ -9,7 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 @Controller
 public class LoginController {
@@ -22,13 +21,5 @@ public class LoginController {
     ) {
         ModelAndView view = new ModelAndView("login");
         return view;
-    }
-
-    @GetMapping("/test-client")
-    ModelAndView testClient(Model model,
-                                     HttpServletRequest request,
-                                     HttpServletResponse response) {
-        Map<String, String[]> data = request.getParameterMap();
-        return new ModelAndView();
     }
 }

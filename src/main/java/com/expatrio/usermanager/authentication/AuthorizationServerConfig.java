@@ -117,6 +117,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit", "code")
                 .redirectUris(
                         "http://localhost:4200/",
+                        "http://localhost:4200/**",
                         "http://localhost:4200",
                         "http://localhost:4200/token-store"
                 );

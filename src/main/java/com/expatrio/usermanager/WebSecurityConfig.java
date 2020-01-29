@@ -62,32 +62,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable();
-        http.requestMatchers()
+        http.cors()
+        .and()
+            .csrf()
+                .disable()
+        .requestMatchers()
             .antMatchers(
                 "/login",
+                "/logout",
                 "/oauth/**",
                 "/error",
                 "/swagger**",
-                "/v2/api-docs");
-
-        http.authorizeRequests()
-            .antMatchers(
+                "/v2/api-docs")
+        .and()
+            .authorizeRequests()
+                .antMatchers(
                     "/login",
                     "/oauth/**",
                     "/error",
                     "/swagger**",
                     "/v2/api-docs")
-            .permitAll()
+                .permitAll()
         .and()
-            .anonymous().and()
-            .httpBasic().disable()
+            .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+        .and()
+            .anonymous()
+        .and()
+            .httpBasic()
+                .disable()
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
         .and()
             .formLogin()
                 .loginPage("/login")
                 .successHandler(successHandler)
-
+//        .and()
+//            .logout()
+//            .logoutSuccessUrl("/exit")
         ;
 
 

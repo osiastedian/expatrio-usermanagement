@@ -6,9 +6,13 @@ import com.expatrio.usermanager.user.dto.UserDto;
 import com.expatrio.usermanager.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -34,5 +38,11 @@ public class UserController {
                 .build();
         UserDto createdUser = userService.createUser(user);
         return createdUser;
+    }
+
+    @GetMapping("/me")
+    UserDto getCurrentUser(Authentication authentication) {
+        String userName = (String) authentication.getPrincipal();
+        return new UserDto(this.userService.loadUserByUsername(userName));
     }
 }
