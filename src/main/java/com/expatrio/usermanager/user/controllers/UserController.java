@@ -5,14 +5,13 @@ import com.expatrio.usermanager.user.dto.CreateUserDto;
 import com.expatrio.usermanager.user.dto.UserDto;
 import com.expatrio.usermanager.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.security.core.AuthenticatedPrincipal;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import java.security.Principal;
 import java.util.UUID;
 
 @RestController
@@ -28,7 +27,7 @@ public class UserController {
     }
 
     @PostMapping()
-    UserDto createUser(@NotNull @RequestBody CreateUserDto userDto) {
+    UserDto createUser(@NotNull @RequestBody CreateUserDto userDto) throws Exception {
         User user = User.builder()
                 .firstName(userDto.getFirstName())
                 .lastName(userDto.getLastName())
@@ -38,6 +37,29 @@ public class UserController {
                 .build();
         UserDto createdUser = userService.createUser(user);
         return createdUser;
+    }
+
+    @GetMapping()
+    Page<UserDto> getAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        return this.userService.findAll(PageRequest.of(page, size));
+    }
+
+    @DeleteMapping("/{id}")
+    UserDto deleteUser(@PathVariable( name = "id") UUID userID) {
+        return userService.deleteUser(userID);
+    }
+
+    @PutMapping("/{id}")
+    UserDto updateUser(@PathVariable( name = "id") UUID userID, @RequestBody UserDto userDto) throws Exception {
+        return userService.updateUser(userID, userDto);
+    }
+
+    @PostMapping("/{id}/change-password")
+    boolean changeUserPassword(@PathVariable( name = "id") UUID userID, @RequestBody String newPassword) {
+        return userService.changePassword(userID, newPassword);
     }
 
     @GetMapping("/me")
