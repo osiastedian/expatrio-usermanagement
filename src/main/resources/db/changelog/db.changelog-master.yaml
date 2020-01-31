@@ -3,13 +3,6 @@ databaseChangeLog:
       id: 1
       author: ted
       changes:
-        - sql:
-            dbms: postgresql
-            sql: "CREATE SCHEMA usermanager"
-  - changeSet:
-      id: 2
-      author: ted
-      changes:
         - createTable:
             tableName: users
             schemaName: usermanager
@@ -46,7 +39,7 @@ databaseChangeLog:
                   constraints:
                     nullable: false
   - changeSet:
-      id: 3
+      id: 2
       author: ted
       changes:
         - insert:
