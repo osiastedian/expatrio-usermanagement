@@ -17,6 +17,6 @@ public interface UserService {
     UserDto updateUser(UUID userId, UserDto user) throws Exception;
     User loadUserByUsername(String userName) throws UsernameNotFoundException;
     Page<UserDto> findAll(Pageable pageable);
-    boolean changePassword(UUID userId, String password);
+    boolean changePassword(UUID userId, String oldPassword, String newPassword);
     UserDto deleteUser(UUID userId);
 }

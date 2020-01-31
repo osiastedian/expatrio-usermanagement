@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
         if(userName.equals("default")) {
             User user = User.builder()
                     .role(UserRole.ADMIN)
+                    .id(UUID.fromString("8ac0f744-8493-4ca6-b6e8-a52afcda63b7"))
                     .firstName("Default")
                     .lastName("Default")
                     .password(passwordEncoder().encode("default"))
@@ -94,7 +95,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean changePassword(UUID userId, String password) {
+    public boolean changePassword(UUID userId, String oldPassword, String newPassword) {
         if(userId == null) {
             throw new IllegalArgumentException("Invalid User ID");
         }
@@ -102,7 +103,11 @@ public class UserServiceImpl implements UserService {
         if(userFound == null) {
             throw  new IllegalArgumentException("User not Found");
         }
-        userFound.setPassword(this.passwordEncoder().encode(password));
+        String oldEncrypted = passwordEncoder().encode(oldPassword);
+        if(!oldEncrypted.equals(userFound.getPassword())) {
+            throw new IllegalArgumentException("Wrong Password");
+        }
+        userFound.setPassword(this.passwordEncoder().encode(newPassword));
         return userRepository.save(userFound) != null;
     }
 

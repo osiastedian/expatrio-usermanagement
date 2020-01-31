@@ -1,10 +1,7 @@
 package com.expatrio.usermanager.user.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +21,7 @@ public class User implements UserDetails {
 
     @NoArgsConstructor
     @Data
-    class UserAuthority implements GrantedAuthority {
+    public class UserAuthority implements GrantedAuthority {
         UserRole role;
         UserAuthority(UserRole role)
         {
@@ -36,7 +33,7 @@ public class User implements UserDetails {
             String authority = "No Access";
             switch (this.role) {
                 case ADMIN: authority = "Admin"; break;
-                case CUSTOMER: authority = "Customer"; break;
+                case CUSTOMER:authority = "Customer"; break;
             }
             return authority;
         }
@@ -44,9 +41,10 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Nullable
     UUID id;
     String username;
+
+    @NonNull
     String password;
     String firstName;
     String lastName;
