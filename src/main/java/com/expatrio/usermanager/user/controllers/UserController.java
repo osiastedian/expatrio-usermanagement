@@ -1,7 +1,6 @@
 package com.expatrio.usermanager.user.controllers;
 
 import com.expatrio.usermanager.user.domain.User;
-import com.expatrio.usermanager.user.domain.UserRole;
 import com.expatrio.usermanager.user.dto.ChangePasswordDto;
 import com.expatrio.usermanager.user.dto.CreateUserDto;
 import com.expatrio.usermanager.user.dto.UserDto;
@@ -17,7 +16,6 @@ import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationDetails;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
-import sun.tools.jstat.Token;
 
 import javax.validation.constraints.NotNull;
 import java.util.Map;
@@ -34,7 +32,7 @@ public class UserController {
     TokenStore tokenStore;
 
     @GetMapping("/{id}")
-    UserDto getUser(@PathVariable( name = "id") UUID userID) {
+    UserDto getUser(@PathVariable(name = "id") UUID userID) {
         return userService.getUser(userID);
     }
 
@@ -62,18 +60,18 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('Admin')")
     @DeleteMapping("/{id}")
-    UserDto deleteUser(@PathVariable( name = "id") UUID userId,
+    UserDto deleteUser(@PathVariable(name = "id") UUID userId,
                        OAuth2Authentication authentication) {
         return userService.deleteUser(userId);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyAuthority('Admin','Customer')")
-    UserDto updateUser(@PathVariable( name = "id") UUID userId,
+    UserDto updateUser(@PathVariable(name = "id") UUID userId,
                        @RequestBody UserDto userDto,
                        OAuth2Authentication authentication) throws Exception {
         boolean isCustomer = authentication.getAuthorities().stream().anyMatch((GrantedAuthority authority) -> authority.getAuthority().equals("Customer"));
-        if(isCustomer && !checkIfSameWithCurrentUser(userId, authentication));
+        if (isCustomer && !checkIfSameWithCurrentUser(userId, authentication)) ;
         return userService.updateUser(userId, userDto);
     }
 
@@ -82,8 +80,8 @@ public class UserController {
         OAuth2AccessToken token = tokenStore.readAccessToken(details.getTokenValue());
         Map<String, Object> info = token.getAdditionalInformation();
         Object tokenId = info.getOrDefault("id", null);
-        if(tokenId instanceof String) {
-            if( !userId.equals(UUID.fromString((String)tokenId))) {
+        if (tokenId instanceof String) {
+            if (!userId.equals(UUID.fromString((String) tokenId))) {
                 throw new IllegalArgumentException("Invalid Operation");
             }
         }
@@ -92,7 +90,7 @@ public class UserController {
 
     @PostMapping("/{id}/change-password")
     @PreAuthorize("hasAuthority('Admin')")
-    boolean changeUserPassword(@PathVariable( name = "id") UUID userID, @RequestBody ChangePasswordDto changePasswordDto) {
+    boolean changeUserPassword(@PathVariable(name = "id") UUID userID, @RequestBody ChangePasswordDto changePasswordDto) {
         return userService.changePassword(userID, changePasswordDto.getOldPassword(), changePasswordDto.getOldPassword());
     }
 

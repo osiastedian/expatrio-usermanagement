@@ -22,9 +22,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
-import java.util.Collections;
 
 @Configuration
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -35,15 +33,11 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     String clientSecret;
     @Autowired
     PasswordEncoder encoder;
-    @Value("${spring.security.oauth2.resourceserver.jwt.pub-key}")
-    RSAPublicKey key;
     @Value("${jwt.signing-key}")
     String jwtSigningKey;
     @Autowired
     @Qualifier("authenticationManagerBean")
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
@@ -104,26 +98,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient(clientId)
                 .secret(encoder.encode(clientSecret))
                 .autoApprove(true)
-                .scopes("resource:read","read", "write", "openid")
+                .scopes("resource:read", "read", "write", "openid")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit")
                 .redirectUris(
-                    "http://localhost:4200/",
-                    "http://localhost:4200/token-store",
-                    "http://localhost:8080/test-client",
-                    "http://localhost:8080/swagger-ui.html",
-                    "http://localhost:8080/webjars/springfox-swagger-ui/oauth2-redirect.html"
+                        "http://localhost:4200/",
+                        "http://localhost:8080/swagger-ui.html",
+                        "http://localhost:8080/webjars/springfox-swagger-ui/oauth2-redirect.html"
                 )
-            .and()
+                .and()
                 .withClient("user-manager-ui")
                 .secret("user-manager-ui-secret")
                 .autoApprove(true)
-                .scopes("resource:read","read", "write", "openid", "profile")
+                .scopes("resource:read", "read", "write", "openid", "profile")
                 .authorizedGrantTypes("authorization_code", "client_credentials", "password", "implicit", "code")
                 .redirectUris(
                         "http://localhost:4200/",
                         "http://localhost:4200/**",
-                        "http://localhost:4200",
-                        "http://localhost:4200/token-store"
+                        "http://localhost:4200"
                 );
 
     }
