@@ -57,17 +57,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loadUserByUsername(String userName) throws UsernameNotFoundException {
-        if(userName.equals("default")) {
-            User user = User.builder()
-                    .role(UserRole.ADMIN)
-                    .id(UUID.fromString("8ac0f744-8493-4ca6-b6e8-a52afcda63b7"))
-                    .firstName("Default")
-                    .lastName("Default")
-                    .password(passwordEncoder().encode("default"))
-                    .username("default")
-                    .build();
-            return user;
-        }
+//        if(userName.equals("default")) {
+//            User user = User.builder()
+//                    .role(UserRole.ADMIN)
+//                    .id(UUID.fromString("8ac0f744-8493-4ca6-b6e8-a52afcda63b7"))
+//                    .firstName("Default")
+//                    .lastName("Default")
+//                    .password(passwordEncoder().encode("default"))
+//                    .username("default")
+//                    .build();
+//            return user;
+//        }
         User user = userRepository.getUserByUsername(userName);
         if(user == null) {
             throw new UsernameNotFoundException(String.format("%s does not exists", userName));

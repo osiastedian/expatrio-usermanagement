@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: ted
+      changes:
+        - sql:
+            dbms: postgresql
+            sql: "CREATE SCHEMA usermanager"
+  - changeSet:
+      id: 2
+      author: ted
+      changes:
+        - createTable:
+            tableName: users
+            schemaName: usermanager
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: first_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role
+                  type: integer
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 3
+      author: ted
+      changes:
+        - insert:
+            tableName: users
+            schemaName: usermanager
+            columns:
+              - column:
+                  name: id
+                  value: "8ac0f744-8493-4ca6-b6e8-a52afcda63b7"
+              - column:
+                  name: username
+                  value: "default"
+              - column:
+                  name: password
+                  value: "$2b$10$1D4E3v4hSK02rHQiKy18J.4ykU3wYHlaVdUB.DuwYwJ.clTBcU3S2"
+              - column:
+                  name: first_name
+                  value: "Default First Name"
+              - column:
+                  name: last_name
+                  value: "Default Last Name"
+              - column:
+                  name: role
+                  value: 0

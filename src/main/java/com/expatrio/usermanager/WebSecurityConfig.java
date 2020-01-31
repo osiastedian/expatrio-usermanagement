@@ -1,30 +1,20 @@
 package com.expatrio.usermanager;
 
 import com.expatrio.usermanager.authentication.AuthUserDetailsService;
-import com.expatrio.usermanager.user.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.security.interfaces.RSAPublicKey;
 
 @Configuration
 @EnableWebSecurity
@@ -33,9 +23,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
 
     @Autowired
     AuthUserDetailsService userService;
-
-    @Value("${spring.security.oauth2.resourceserver.jwt.pub-key}")
-    RSAPublicKey key;
 
     @Autowired
     AuthenticationSuccessHandler successHandler;
@@ -63,38 +50,38 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors()
-        .and()
-            .csrf()
+                .and()
+                .csrf()
                 .disable()
-        .requestMatchers()
-            .antMatchers(
-                "/login",
-                "/logout",
-                "/oauth/**",
-                "/error",
-                "/swagger**",
-                "/v2/api-docs")
-        .and()
-            .authorizeRequests()
+                .requestMatchers()
                 .antMatchers(
-                    "/login",
-                    "/oauth/**",
-                    "/error",
-                    "/swagger**",
-                    "/v2/api-docs")
+                        "/login",
+                        "/logout",
+                        "/oauth/**",
+                        "/error",
+                        "/swagger**",
+                        "/v2/api-docs")
+                .and()
+                .authorizeRequests()
+                .antMatchers(
+                        "/login",
+                        "/oauth/**",
+                        "/error",
+                        "/swagger**",
+                        "/v2/api-docs")
                 .permitAll()
-        .and()
-            .authorizeRequests()
+                .and()
+                .authorizeRequests()
                 .anyRequest()
                 .authenticated()
-        .and()
-            .anonymous()
-        .and()
-            .httpBasic()
+                .and()
+                .anonymous()
+                .and()
+                .httpBasic()
                 .disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
-        .and()
-            .formLogin()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                .and()
+                .formLogin()
                 .loginPage("/login")
                 .successHandler(successHandler)
 //        .and()
@@ -103,13 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         ;
 
 
-
     }
-
-
-
-
-
 
 
 }
