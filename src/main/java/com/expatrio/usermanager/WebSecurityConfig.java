@@ -58,6 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                         "/login",
                         "/logout",
                         "/oauth/**",
+                        "/token/revoke",
                         "/error",
                         "/swagger**",
                         "/v2/api-docs")
@@ -66,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .antMatchers(
                         "/login",
                         "/oauth/**",
+                        "/token/revoke",
                         "/error",
                         "/swagger**",
                         "/v2/api-docs")
@@ -84,9 +86,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .formLogin()
                 .loginPage("/login")
                 .successHandler(successHandler)
-//        .and()
-//            .logout()
-//            .logoutSuccessUrl("/exit")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/exit")
+                .deleteCookies("JSESSIONID")
         ;
 
 
