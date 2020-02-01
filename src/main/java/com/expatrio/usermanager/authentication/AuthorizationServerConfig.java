@@ -64,8 +64,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
         corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-//        corsConfiguration.addAllowedMethod("DELETE");
+        corsConfiguration.addAllowedMethod("POST");
         source.registerCorsConfiguration("/oauth/token", corsConfiguration);
         CorsFilter filter = new CorsFilter(source);
         security.addTokenEndpointAuthenticationFilter(filter);
